@@ -57,7 +57,6 @@ This is a **full-stack Next.js application** that provides:
 
 ### **6. Image & Asset Optimization**
 - Use Next.js `<Image>` for automatic image optimization.
-- Compress uploaded screenshots (Paytm payment proof) before storage.
 
 ---
 
