@@ -12,6 +12,82 @@ This is a **full-stack Next.js application** that provides:
 
 ---
 
+## ⚡ Advanced Resource Optimization Techniques
+
+### **1. Debouncing & Throttling**
+- **When to use**:
+  - Search input boxes (user list, booking history filters, notice search).
+  - Live form validation.
+  - Scroll-based event triggers.
+- **Implementation Guidelines**:
+  - Create a reusable `useDebounce` hook for inputs.
+  - Use throttling for repetitive background API calls (e.g., booking status polling).
+
+---
+
+### **2. Lazy Loading & Code Splitting**
+- Lazy-load dashboard components that are not immediately visible.
+- Example: Load `BookingHistoryTable` only when the user navigates to that tab.
+- Use Next.js `dynamic()` import for large modules like charts and data tables.
+
+---
+
+### **3. Database Query Optimization**
+- Add Prisma query filters to only select needed fields instead of `select: *`.
+- Always paginate large queries.
+- Add indexes for:
+  - `createdAt` on all main tables.
+  - `status` for bookings.
+  - `email` for users/admins.
+
+---
+
+### **4. Server-Side Caching**
+- Use in-memory caching (e.g., `lru-cache`) for:
+  - Frequently accessed data like notices or dashboard stats.
+- Apply short TTL (time-to-live) for freshness.
+
+---
+
+### **5. API Request Batching**
+- Batch multiple small requests into a single API call when possible.
+- Example: Fetch booking stats + pending requests count in one endpoint.
+
+---
+
+### **6. Image & Asset Optimization**
+- Use Next.js `<Image>` for automatic image optimization.
+- Compress uploaded screenshots (Paytm payment proof) before storage.
+
+---
+
+### **7. Client-Side State Management**
+- Use React Query or SWR for data fetching:
+  - Automatic caching
+  - Background refetch
+  - Reduces unnecessary API calls
+
+---
+
+### **8. Form Handling Efficiency**
+- Use form libraries like `react-hook-form` to minimize re-renders.
+- Combine validation with Zod for type safety.
+
+---
+
+### **9. Prevent Overfetching**
+- Only refetch data when it changes:
+  - Use `refetchOnWindowFocus: false` in SWR/React Query.
+  - Use WebSocket or Server-Sent Events for live updates instead of polling.
+
+---
+
+### **10. Pre-rendering & Incremental Static Regeneration**
+- Use `getServerSideProps` for dynamic pages that must be fresh on each request.
+- Use `getStaticProps` + revalidation for rarely changing pages like Notices.
+
+---
+
 ## 📌 Additional Functional Requirements (From Project Specification)
 
 ### **Initial Cylinder Allocation**
