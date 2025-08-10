@@ -12,6 +12,118 @@ This is a **full-stack Next.js application** that provides:
 
 ---
 
+## 📌 Additional Functional Requirements (From Project Specification)
+
+### **Initial Cylinder Allocation**
+- On user registration:
+  - Create a `cylinderBalance` field with a default value of **12**.
+  - Create an `allocationExpiry` date set to **current date + 1 year**.
+- Booking restrictions:
+  - Users cannot book more cylinders if `cylinderBalance` is **0** and `allocationExpiry` is still in the future.
+  - If allocation period has expired, balance resets to 12 automatically.
+- Admin control:
+  - Admin dashboard should include a **"Reset Balance"** button for individual users.
+  - Option to adjust cylinder balance manually.
+
+---
+
+### **Additional Payment Methods**
+- **Cash on Delivery (COD)**:
+  - User can select COD during checkout.
+  - Booking record is created with `paymentStatus = PENDING` and `paymentMethod = COD`.
+  - Admin can later mark COD payment as received.
+- **Paytm QR Code Payment**:
+  - Display static Paytm QR code on checkout page.
+  - Allow users to enter **transaction ID** and upload a **payment screenshot**.
+  - Admin reviews and marks payment as successful.
+- Maintain consistent payment status tracking for all methods.
+
+---
+
+### **Account Balance Emails**
+- After every booking/payment:
+  - Send an email showing:
+    - Booking details
+    - Payment confirmation
+    - Updated cylinder balance
+    - Allocation expiry date
+- Use Gmail SMTP for sending transactional emails.
+- Templates should be consistent and professional.
+
+---
+
+### **Expanded Logging**
+- Log **all CRUD actions** across the system, including:
+  - User login attempts (success/failure)
+  - User registration
+  - Booking creation, update, deletion
+  - Payment status updates
+  - Profile updates
+  - Admin actions (approvals, rejections, notice creation)
+- Include:
+  - Timestamp
+  - Performed by (User ID / Admin ID)
+  - Action description
+  - Related entity ID
+
+---
+
+## 🛠 Quality & Coding Guidelines
+- **Code Style**
+  - Use PascalCase for React components.
+  - No inline CSS; use Tailwind classes.
+  - Keep logic and UI separate.
+  - Avoid deeply nested components; split into smaller, reusable parts.
+- **Architecture**
+  - Use `services/` folder for DB operations.
+  - Keep API handlers in `app/api/` and group by feature.
+  - Shared constants and validation schemas in `utils/`.
+- **Modularity**
+  - Each feature (Bookings, Payments, Notices, Users) should have:
+    - Its own API endpoints
+    - Its own React components
+    - Its own service functions
+- **Security**
+  - Validate all inputs using Zod.
+  - Sanitize user input to prevent XSS.
+  - Role-based checks in all API routes.
+- **Performance**
+  - Use pagination for all tables.
+  - Implement database indexes for frequently queried fields.
+
+---
+
+## 🧪 Testing Scenarios & Expected Results
+
+| Test Case | Steps | Expected Result |
+|-----------|-------|-----------------|
+| **1. User Registration** | Register new user with valid data | Account created, `cylinderBalance = 12`, `allocationExpiry = +1 year` |
+| **2. Booking with Razorpay** | Book a cylinder, pay via Razorpay | Payment verified, booking status updated, cylinder balance reduced |
+| **3. Booking with COD** | Book using COD method | Booking created with `paymentStatus = PENDING`, admin can approve |
+| **4. Booking with Paytm QR** | Book using Paytm QR, enter transaction ID | Booking created, admin verifies payment |
+| **5. Cylinder Balance Restriction** | Try to book with balance = 0 | Booking denied with error message |
+| **6. Annual Balance Reset** | Simulate expiry date passed | Balance resets to 12 |
+| **7. Admin Notice Update** | Create new notice | Notice visible to users instantly |
+| **8. Payment Failure Handling** | Fail payment intentionally | Booking status = PENDING, user notified |
+| **9. Email Notification** | Make successful booking | Email received with updated balance and booking details |
+| **10. Unauthorized Route Access** | Access `/admin/*` without login | Redirected to admin login |
+
+---
+
+## 🖥 Deployment Justification
+**Why Vercel?**
+- Automatic GitHub integration with CI/CD.
+- Global CDN for fast delivery.
+- Free tier suitable for small projects.
+- Easy environment variable configuration.
+
+**Why Railway PostgreSQL?**
+- Free tier available.
+- Automatic backups and scaling.
+- Works seamlessly with Prisma ORM.
+
+---
+
 ## 📅 Timeline (4 Weeks / 8 Phases)
 
 ---
